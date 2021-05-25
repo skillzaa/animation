@@ -18,45 +18,39 @@ impl Animation{
     assert!(from_time < to_time,"From time can not be bigger than To time");   
     assert!(from < 5000,"From value is too large");
     assert!(to < 5000,"To value is too large");
-
+        let from_time_millis:u128 = from_time * 1000;
+        let to_time_millis:u128 = to_time * 1000;
             Ok(Animation {
-                from_time : from_time * 1000,
-                to_time : to_time * 1000,
+                from_time : from_time_millis,
+                to_time : to_time_millis,
                 from,
                 to,
                 is_reverse: is_reverse(from, to),
-                animation_duration : animation_duration(to_time, from_time), 
-                animation_distance:animation_duration(to_time, from_time),
+                animation_duration : animation_duration(to_time_millis, from_time_millis), 
+                animation_distance:animation_distance(from, to),
                 generator:String::from(generator),
                 attr_to_animate:String::from(attr_to_animate),
             })
-    }
-       
-    pub fn animate(&self,time_ms:u128)->Result<u128,Error>{   
-    
-        self.is_time_valid(time_ms)?;
-        if self.is_reverse {
-            let milli_per_pix = self.milli_per_pix()?;
-            let animation_time_lapsed = self.animation_time_lapsed(time_ms);
-            return Ok( milli_per_pix * animation_time_lapsed - self.from);
-        }else{
-            let milli_per_pix = milli_per_pix()?;
-            let animation_time_lapsed = self.animation_time_lapsed(time_ms);
-            return Ok( milli_per_pix * animation_time_lapsed + self.from);
-        }        
-    }
-    fn milli_per_pix(animation_duration:u128,animation_distance:u128)->u128{
-        assert!(animation_distance > 0, "Distance cant be smaller than zero");   
-        let c = animation_duration/animation_distance as u128;
-        c
-        }
+    }       
+    pub fn animate(&self,time_ms:u128)->u128{      
+        self.is_time_valid(time_ms);
         
-    //-----private api
-    fn is_time_valid(&self,time_ms:u128)->Result<bool,Error>{
+        if self.is_reverse {
+            return  self.milli_per_pix() * self.millis_lapsed(time_ms) - self.from;
+        }else{
+            return  self.milli_per_pix() * self.millis_lapsed(time_ms) + self.from;        }        
+    }
+        //-----private api
+    fn milli_per_pix(&self)->u128{
+        assert!(self.animation_distance > 0, "Distance cant be smaller than zero");   
+        let c = self.animation_duration/self.animation_distance as u128;
+        c
+        }    
+    fn is_time_valid(&self,time_ms:u128)->bool{
         if time_ms > self.to_time || time_ms < self.from_time {
-            Err(Error::new(ErrorKind::Other, "Time is not valid"))
+            panic!("Time is not valid")
            }else {
-               Ok(true)
+               true
            }       
     }
     fn millis_lapsed(&self,time_ms:u128)->u128{
@@ -90,41 +84,9 @@ fn test_is_time_valid() {
     match a {
         Ok(a)=>{
             for i in 1000..10000{
-                match a.is_time_valid(i) {
-                    Ok(v)=> assert_eq!(v,true),
-                    Err(e)=>{
-                        panic!("it should never come to this");
-                    },
-                }
-            }
+                assert!(a.is_time_valid(i));
+            }    
         },        
         Err(e)=>(),
     }
-    // println!("{:?}",b);
 }
-#[cfg(test)]
-#[test]
-fn test_is_time_valid2() {
-    let a = Animation::new(1,10,100,1000,"counter","width");
-    match a {
-        Ok(a)=>{
-            for i in 1..999{
-                match a.is_time_valid(i) {
-                    Ok(v)=> panic!("Should not come to this"),
-                    Err(e)=>{
-                        assert_eq!(std::io::ErrorKind::Other,e.kind());
-                        // println!("{:?}",e.kind());
-                    },
-                }
-            }
-        },        
-        Err(e)=>(),
-    }
-    // println!("{:?}",b);
-}
-
-pub fn ani_gen_test(a:Animation){
-
-
-}
-
