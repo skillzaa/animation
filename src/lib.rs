@@ -5,6 +5,9 @@ pub struct Animation {
     to_time:u128,
     from:u128,
     to:u128,
+    is_reverse:bool,
+    animation_duration:u128,
+    animation_distance:u128,
     generator:String,
     attr_to_animate:String,
 }
@@ -21,6 +24,9 @@ impl Animation{
                 to_time : to_time * 1000,
                 from,
                 to,
+                is_reverse: is_reverse(from, to),
+                animation_duration : animation_duration(to_time, from_time), 
+                animation_distance:animation_duration(to_time, from_time),
                 generator:String::from(generator),
                 attr_to_animate:String::from(attr_to_animate),
             })
@@ -29,16 +35,22 @@ impl Animation{
     pub fn animate(&self,time_ms:u128)->Result<u128,Error>{   
     
         self.is_time_valid(time_ms)?;
-        if self.is_reverse() {
+        if self.is_reverse {
             let milli_per_pix = self.milli_per_pix()?;
-            let time_lapsed = self.time_lapsed(time_ms);
-            return Ok( milli_per_pix * time_lapsed - self.from);
+            let animation_time_lapsed = self.animation_time_lapsed(time_ms);
+            return Ok( milli_per_pix * animation_time_lapsed - self.from);
         }else{
-            let milli_per_pix = self.milli_per_pix()?;
-            let time_lapsed = self.time_lapsed(time_ms);
-            return Ok( milli_per_pix * time_lapsed + self.from);
+            let milli_per_pix = milli_per_pix()?;
+            let animation_time_lapsed = self.animation_time_lapsed(time_ms);
+            return Ok( milli_per_pix * animation_time_lapsed + self.from);
         }        
     }
+    fn milli_per_pix(animation_duration:u128,animation_distance:u128)->u128{
+        assert!(animation_distance > 0, "Distance cant be smaller than zero");   
+        let c = animation_duration/animation_distance as u128;
+        c
+        }
+        
     //-----private api
     fn is_time_valid(&self,time_ms:u128)->Result<bool,Error>{
         if time_ms > self.to_time || time_ms < self.from_time {
@@ -47,35 +59,29 @@ impl Animation{
                Ok(true)
            }       
     }
-    fn time_lapsed(&self,time_ms:u128)->u128{
+    fn millis_lapsed(&self,time_ms:u128)->u128{
         //--time is valid check is seperate.       
         time_ms - self.from_time
     }
-    fn animation_duration(&self)->u128{
-        self.to_time - self.from_time
-    }
-    fn animation_distance (&self)->u128{
-        self.to - self.from
-    }
-    fn milli_per_pix(&self)->Result<u128,Error>{
-        let a = self.animation_duration();
-        let b = self.animation_distance();
-        if b == 0 {
-           Err(Error::new(ErrorKind::Other, "Division By Zero"))
-          }else {
-            let c = a/b as u128;
-            Ok(c)
-          }
-    }
-    fn is_reverse(&self)->bool{
-        if self.from < self.to {
-            false
-        }else {
-            true
-        }
-    }
-
+    
 }//end of impl block
+fn is_reverse(from:u128,to:u128)->bool{
+    if from < to {
+        false
+    }else {
+        true
+    }
+}
+fn animation_duration(to_time:u128,from_time:u128)->u128{
+    let ret:u128 = to_time - from_time;
+    ret
+}
+fn animation_distance (from:u128,to:u128)->u128{
+    let c = to - from as u128;
+        c
+}
+
+
 ///////////////////////////////===========tests
 #[cfg(test)]
 #[test]
@@ -116,3 +122,9 @@ fn test_is_time_valid2() {
     }
     // println!("{:?}",b);
 }
+
+pub fn ani_gen_test(a:Animation){
+
+
+}
+
