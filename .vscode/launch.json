@@ -1,0 +1,83 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'bilzaa2danimation'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=bilzaa2danimation"
+                ],
+                "filter": {
+                    "name": "bilzaa2danimation",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'bilzaa2danimation'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=bilzaa2danimation",
+                    "--package=bilzaa2danimation"
+                ],
+                "filter": {
+                    "name": "bilzaa2danimation",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'bilzaa2danimation'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=bilzaa2danimation",
+                    "--package=bilzaa2danimation"
+                ],
+                "filter": {
+                    "name": "bilzaa2danimation",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'first'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=first",
+                    "--package=bilzaa2danimation"
+                ],
+                "filter": {
+                    "name": "first",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
