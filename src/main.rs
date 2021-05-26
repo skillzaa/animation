@@ -1,9 +1,6 @@
-use std::{io::{Error,ErrorKind}, u128};
-
-use bilzaa2danimation::Animation;
+mod calc;
+use calc::percent_to_value;
 fn main(){
-let a = Animation::new(1, 5, 0, 1000, "generator", "width");
-println!("{:?}",a);
-  
+//   let a = percent_to_value(0,0);
+  percent_to_value(0_f64,10_f64);  
 }
-

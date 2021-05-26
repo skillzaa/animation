@@ -1,14 +1,11 @@
-
-mod calc;
-pub use calc::percent_to_value;
-use std::{io::{Error,ErrorKind}, ops::Div, u128};
+use std::{io::{Error,ErrorKind}, u128};
 #[derive(Debug)]
 pub struct Animation {
     from_time:u128,
     to_time:u128,
     from:u128,
     to:u128,
-    is_reverse:bool, 
+    is_reverse:bool,
     animation_duration:u128,
     animation_distance:u128,
     generator:String,
@@ -36,10 +33,32 @@ impl Animation{
             })
     }       
     pub fn animate(&self,time_ms:u128)->u128{      
-   88   
+        self.is_time_valid(time_ms);
+        
+        if self.is_reverse {
+            return  self.milli_per_pix() * self.millis_lapsed(time_ms) - self.to;
+        }else{
+            return  self.milli_per_pix() * self.millis_lapsed(time_ms) + self.from;        }        
+    }
+        //-----private api
+    pub fn milli_per_pix(&self)->u128{
+        assert!(self.animation_distance > 0, "Distance cant be smaller than zero");   
+        let c = self.animation_duration/self.animation_distance as u128;
+        c
+        }    
+    fn is_time_valid(&self,time_ms:u128)->bool{
+        if time_ms > self.to_time || time_ms < self.from_time {
+            panic!("Time is not valid")
+           }else {
+               true
+           }       
+    }
+    fn millis_lapsed(&self,time_ms:u128)->u128{
+        //--time is valid check is seperate.       
+        time_ms - self.from_time
     }
     
-    }//end of impl block
+}//end of impl block
 fn is_reverse(from:u128,to:u128)->bool{
     if from < to {
         false
@@ -56,23 +75,18 @@ fn animation_distance (from:u128,to:u128)->u128{
         c
 }
 
+
 ///////////////////////////////===========tests
 #[cfg(test)]
 #[test]
-fn basic(){
-    let a = Animation::new(0, 10, 0, 100, "generator", "width");
-    // println!("{:?}",a);
-    // match a {
-    //     Ok(b)=>{    
-    //         // assert!(b.animate(0),0);
-    //         // println!("at 0 ms x ={:?}",b.animate(1));
-    //         // println!("at 1000 ms x ={:?}",b.animate(1000));
-    //         println!("at 2500 ms x ={:?}",b.animate(3000));
-    //         println!("at 5000 ms x ={:?}",b.animate(5000));
-    //         assert!(true);
-    
-    //     },
-    //     Err(e)=>(),
-    // }
-      
+fn test_is_time_valid() {
+    let a = Animation::new(1,10,100,1000,"counter","width");
+    match a {
+        Ok(a)=>{
+            for i in 1000..10000{
+                assert!(a.is_time_valid(i));
+            }    
+        },        
+        Err(e)=>(),
+    }
 }
