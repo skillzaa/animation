@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "lldb",
             "request": "launch",
@@ -63,16 +64,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug integration test 'first'",
+            "name": "Debug integration test 'auto'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--test=first",
+                    "--test=auto",
                     "--package=bilzaa2danimation"
                 ],
                 "filter": {
-                    "name": "first",
+                    "name": "auto",
                     "kind": "test"
                 }
             },
