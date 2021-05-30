@@ -1,6 +1,6 @@
 [package]
 name = "bilzaa2dcounter"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["bilal <skillzaa.com@gmail.com>"]
 edition = "2018"
 description = "It takes a time and then check the animation and return the current value"

@@ -33,11 +33,11 @@ impl Animation{
                 attr_to_animate:String::from(attr_to_animate),
             })
     } 
-    fn is_time_valid(&self,time_ms:u128)->bool{
+    fn is_time_valid(&self,time_ms:u128)->Option<bool>{
         if time_ms > self.to_time || time_ms < self.from_time {
-            panic!("Time is not valid")
+            return None;
            }else {
-               true
+               Some(true)
            }       
     }
     fn time_lapsed(&self,time_ms:u128)->u128{
@@ -45,7 +45,7 @@ impl Animation{
         time_ms - self.from_time
     }      
     pub fn animate(&self,time_ms:u128)->Option<u128>{     
-        self.is_time_valid(time_ms);
+        self.is_time_valid(time_ms)?;
         let time_lapsed = self.time_lapsed(time_ms);
         let time_perc_lapsed = percent_to_value(self.animation_duration as f64, time_lapsed as f64);
         match time_perc_lapsed {
