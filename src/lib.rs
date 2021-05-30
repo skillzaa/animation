@@ -67,7 +67,10 @@ impl Animation{
         }       
     }
    
-    }//end of impl block
+    pub fn get_attr_to_animate(&self)->String{
+        String::from(&self.attr_to_animate)
+    }    
+}//end of impl block
 fn is_reverse(from:u128,to:u128)->bool{
     if from < to {
         return false

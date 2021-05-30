@@ -1,4 +1,4 @@
-use bilzaa2danimation::Animation;
+use bilzaa2dcounter::Animation;
 //use #[should_panic] with the test --if to check errors 
 fn test_a(a:Animation,time_ms:u128,answer:u128){
     match a.animate(time_ms) {
@@ -15,6 +15,12 @@ fn get_a(from_time:u128,to_time:u128,from:u128,to:u128)->Animation{
 }
 //////////////////////////////////
 // #[cfg(test)]
+#[test]
+fn get_attr(){
+  let a:Animation = get_a(0,10,0,100); 
+  let ata = a.get_attr_to_animate();
+ assert_eq!(ata,"width");
+}
 #[test]
 fn first(){
   let a:Animation = get_a(0,10,0,100);  
