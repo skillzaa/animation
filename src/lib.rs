@@ -1,4 +1,4 @@
-
+use bilzaa2dattributes::AttributesEnum;
 mod calc;
 pub use calc::{percent_to_value,percentage};
 
@@ -11,12 +11,12 @@ pub struct Animation {
     is_reverse:bool, 
     animation_duration:u128,
     animation_distance:u128,
-    attr_to_animate:String,
+    attr_to_animate:AttributesEnum,
 }
 //==========================================
 
 impl Animation{
-    pub fn new(from_time:u128,to_time:u128,from:u128,to:u128,attr_to_animate:&str)->Option<Animation>{
+    pub fn new(from_time:u128,to_time:u128,from:u128,to:u128,attr_to_animate:AttributesEnum)->Option<Animation>{
     assert!(from_time < to_time,"From time can not be bigger than To time");   
     assert!(from < 5000,"From value is too large");
     assert!(to < 5000,"To value is too large");
@@ -30,7 +30,7 @@ impl Animation{
                 is_reverse: is_reverse(from, to),
                 animation_duration : animation_duration(to_time_millis, from_time_millis), 
                 animation_distance:animation_distance(from, to),
-                attr_to_animate:String::from(attr_to_animate),
+                attr_to_animate:attr_to_animate,
             })
     } 
     pub fn is_time_valid(&self,time_ms:u128)->Option<bool>{
@@ -67,8 +67,8 @@ impl Animation{
         }       
     }
    
-    pub fn get_attr_to_animate(&self)->String{
-        String::from(&self.attr_to_animate)
+    pub fn get_attr_to_animate(&self)->AttributesEnum{
+        self.attr_to_animate
     }    
 }//end of impl block
 fn is_reverse(from:u128,to:u128)->bool{

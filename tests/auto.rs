@@ -1,4 +1,6 @@
 use bilzaa2dcounter::Animation;
+use bilzaa2dattributes::AttributesEnum;
+
 //use #[should_panic] with the test --if to check errors 
 fn test_a(a:Animation,time_ms:u128,answer:u128){
     match a.animate(time_ms) {
@@ -7,7 +9,7 @@ fn test_a(a:Animation,time_ms:u128,answer:u128){
     }
 }
 fn get_a(from_time:u128,to_time:u128,from:u128,to:u128)->Animation{
-    let a = Animation::new(from_time, to_time, from, to, "width");
+    let a = Animation::new(from_time, to_time, from, to, AttributesEnum::Width);
     match a {
         Some(b)=>{return b},
         None=>panic!("Animation creation error"),
@@ -19,7 +21,7 @@ fn get_a(from_time:u128,to_time:u128,from:u128,to:u128)->Animation{
 fn get_attr(){
   let a:Animation = get_a(0,10,0,100); 
   let ata = a.get_attr_to_animate();
- assert_eq!(ata,"width");
+ assert_eq!(ata,AttributesEnum::Width);
 }
 #[test]
 fn first(){
