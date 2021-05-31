@@ -33,7 +33,7 @@ impl Animation{
                 attr_to_animate:String::from(attr_to_animate),
             })
     } 
-    fn is_time_valid(&self,time_ms:u128)->Option<bool>{
+    pub fn is_time_valid(&self,time_ms:u128)->Option<bool>{
         if time_ms > self.to_time || time_ms < self.from_time {
             return None;
            }else {
